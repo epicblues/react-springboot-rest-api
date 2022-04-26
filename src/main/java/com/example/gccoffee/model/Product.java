@@ -1,19 +1,21 @@
 package com.example.gccoffee.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 
 public class Product {
+
   private final UUID productId;
+  private final LocalDateTime createdAt;
   private String productName;
   private Category category;
   private long price;
   private String description;
-  private final LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
-  public Product(UUID productId,String productName,Category category, long price ){
+  public Product(UUID productId, String productName, Category category, long price) {
     this.productId = productId;
     this.productName = productName;
     this.category = category;
@@ -30,6 +32,23 @@ public class Product {
     this.description = description;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Product product = (Product) o;
+    return productId.equals(product.productId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(productId);
   }
 
   public UUID getProductId() {
