@@ -64,4 +64,13 @@ class ProductJdbcRepositoryTest extends EmbeddedDatabaseTestModule {
     var searchedProduct = repository.findByName(newProduct.getProductName());
     assertThat(searchedProduct).isNotEmpty().get().isEqualTo(newProduct);
   }
+
+  @Test
+  @DisplayName("상품의 이름을 수정할 수 있다.")
+  void testUpdatingName() {
+    newProduct.setProductName("updated-product");
+    repository.update(newProduct);
+    var updatedProduct = repository.findByName("updated-product");
+    assertThat(updatedProduct).isNotEmpty().get().isEqualTo(newProduct);
+  }
 }
