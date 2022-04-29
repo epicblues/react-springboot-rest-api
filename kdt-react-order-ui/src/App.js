@@ -1,8 +1,9 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProductList } from "./components/ProductList";
 import { Summary } from "./components/Summary";
+import axios from "axios";
 
 function App() {
   const [products, setProducts] = useState([
@@ -25,6 +26,14 @@ function App() {
       price: 12000,
     },
   ]);
+
+  useEffect(() => {
+    // side effect로 비동기 통신을 하는 것이 좋다.
+    (async () => {
+      const { data } = await axios.get("http://localhost:8080/api/v1/products");
+      setProducts(data);
+    })();
+  }, []);
 
   const onAddsClick = (id) => {
     const product = products.find((product) => product.id === id);
