@@ -20,6 +20,7 @@ public class ProductRestController {
 
   @GetMapping("/api/v1/products")
   public List<Product> productList(@RequestParam Optional<Category> category) {
+
     return category
         .map(productService::getProductsByCategory)
         .orElse(productService.getAllProducts());
