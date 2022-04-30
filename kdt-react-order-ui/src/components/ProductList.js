@@ -8,7 +8,7 @@ export const ProductList = ({ productDatas = [], onAddsClick }) => (
     </h5>
     <ul className="list-group products">
       {productDatas.map((data) => (
-        <Product {...data} onAddsClick={onAddsClick} />
+        <Product key={data.productId} {...data} onAddsClick={onAddsClick} />
       ))}
     </ul>
   </>

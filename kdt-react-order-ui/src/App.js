@@ -6,26 +6,7 @@ import { Summary } from "./components/Summary";
 import axios from "axios";
 
 function App() {
-  const [products, setProducts] = useState([
-    {
-      id: "uuid-1",
-      productName: "콜롬비아 커피 1",
-      category: "커피빈",
-      price: 5000,
-    },
-    {
-      id: "uuid-2",
-      productName: "콜롬비아 커피 2",
-      category: "커피빈",
-      price: 10000,
-    },
-    {
-      id: "uuid-3",
-      productName: "콜롬비아 커피 3",
-      category: "커피빈",
-      price: 12000,
-    },
-  ]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     // side effect로 비동기 통신을 하는 것이 좋다.
@@ -35,12 +16,37 @@ function App() {
     })();
   }, []);
 
-  const onAddsClick = (id) => {
-    const product = products.find((product) => product.id === id);
-    const found = items.find((item) => item.id === id);
+  const handleOrderSubmit = async (order) => {
+    if (items.length === 0) {
+      alert("아이템을 추가해 주세요!");
+      return;
+    }
+    const postData = {
+      ...order,
+      orderItems: items.map((item) => ({
+        productId: item.productId,
+        category: item.category,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+    };
+
+    const { data: orderResult } = await axios.post(
+      "http://localhost:8080/api/v1/orders",
+      postData
+    );
+    alert(orderResult);
+    setItems([]);
+  };
+
+  const onAddsClick = (productId) => {
+    const product = products.find((product) => product.productId === productId);
+    const found = items.find((item) => item.productId === productId);
     const updatedItems = found
       ? items.map((item) =>
-          item.id === id ? { ...item, count: item.count + 1 } : item
+          item.productId === productId
+            ? { ...item, count: item.count + 1 }
+            : item
         )
       : [...items, { ...product, count: 1 }];
     setItems(updatedItems);
@@ -58,7 +64,7 @@ function App() {
             <ProductList productDatas={products} onAddsClick={onAddsClick} />
           </div>
           <div className="col-md-4 summary p-4">
-            <Summary items={items} />
+            <Summary items={items} onOrderSubmit={handleOrderSubmit} />
           </div>
         </div>
       </div>

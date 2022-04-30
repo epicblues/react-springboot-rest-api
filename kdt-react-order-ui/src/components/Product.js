@@ -1,8 +1,14 @@
 import React from "react";
 
-export const Product = ({ id, productName, category, price, onAddsClick }) => {
+export const Product = ({
+  productId,
+  productName,
+  category,
+  price,
+  onAddsClick,
+}) => {
   const handleAddBtnClicked = () => {
-    onAddsClick(id);
+    onAddsClick(productId);
   };
   return (
     <>
